@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace PHPinnacle\Elastics;
 
-class Search implements Request
+class Search implements \JsonSerializable
 {
     /**
      * @var Query

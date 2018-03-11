@@ -50,3 +50,19 @@ function elastics_encode($value, bool $pretty = false): string
 
     return $encoded;
 }
+
+/**
+ * @param string $value
+ *
+ * @return array
+ */
+function elastics_decode(string $value): array
+{
+    $decoded = \json_decode($value, true);
+
+    if ($decoded === null) {
+        throw new \InvalidArgumentException(\json_last_error_msg());
+    }
+
+    return $decoded;
+}

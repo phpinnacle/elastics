@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace PHPinnacle\Elastics;
 
-class Request
+class Response
 {
     /**
-     * @var string
+     * @var int
      */
-    private $method;
+    private $status;
 
     /**
      * @var string
@@ -30,35 +30,31 @@ class Request
     private $headers;
 
     /**
-     * @param string $method
+     * @param int    $status
      * @param string $body
      * @param array  $headers
      */
-    public function __construct(string $method, string $body, array $headers = [])
+    public function __construct(int $status, string $body, array $headers = [])
     {
-        $this->method  = \strtoupper($method);
+        $this->status  = $status;
         $this->body    = $body;
         $this->headers = $headers;
     }
 
     /**
-     * @param Search $search
-     *
-     * @return self
+     * @return bool
      */
-    public static function search(Search $search): self
+    public function isError(): bool
     {
-        return new self(\ELASTICS_METHOD_GET, (string) $search, [
-            'Content-Type' => 'application/json'
-        ]);
+        return $this->status >= 400;
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function method(): string
+    public function status(): int
     {
-        return $this->method;
+        return $this->status;
     }
 
     /**

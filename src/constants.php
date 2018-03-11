@@ -11,6 +11,13 @@
 declare(strict_types=1);
 
 const
+    ELASTICS_METHOD_GET    = 'GET',
+    ELASTICS_METHOD_POST   = 'POST',
+    ELASTICS_METHOD_PUT    = 'PUT',
+    ELASTICS_METHOD_DELETE = 'DELETE'
+;
+
+const
     ELASTICS_OPERATOR_OR  = 'or',
     ELASTICS_OPERATOR_AND = 'and'
 ;
