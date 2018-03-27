@@ -39,15 +39,20 @@ class MatchTest extends ElasticsTest
                 'query' => 'query string',
             ],
         ], $query->compile());
+    }
 
+    /**
+     * @test
+     */
+    public function boost()
+    {
+        $query = new Query\Match('field', 'query string');
         $query->boost(0.2);
 
-        self::assertEquals([
-            'field' => [
-                'query' => 'query string',
-                'boost' => 0.2,
-            ],
-        ], $query->compile());
+        $compiled = $query->compile();
+
+        self::assertArrayHasPath('field.boost', $compiled);
+        self::assertEquals(0.2, $compiled['field']['boost']);
     }
 
     /**
@@ -60,8 +65,7 @@ class MatchTest extends ElasticsTest
 
         $compiled = $query->compile();
 
-        self::assertArrayHasKey('field', $compiled);
-        self::assertArrayHasKey('prefix_length', $compiled['field']);
+        self::assertArrayHasPath('field.prefix_length', $compiled);
         self::assertEquals(5, $compiled['field']['prefix_length']);
     }
 
@@ -75,8 +79,7 @@ class MatchTest extends ElasticsTest
 
         $compiled = $query->compile();
 
-        self::assertArrayHasKey('field', $compiled);
-        self::assertArrayHasKey('max_expansions', $compiled['field']);
+        self::assertArrayHasPath('field.max_expansions', $compiled);
         self::assertEquals(20, $compiled['field']['max_expansions']);
     }
 
@@ -90,8 +93,7 @@ class MatchTest extends ElasticsTest
 
         $compiled = $query->compile();
 
-        self::assertArrayHasKey('field', $compiled);
-        self::assertArrayHasKey('fuzziness', $compiled['field']);
+        self::assertArrayHasPath('field.fuzziness', $compiled);
         self::assertEquals('AUTO', $compiled['field']['fuzziness']);
     }
 
@@ -120,8 +122,7 @@ class MatchTest extends ElasticsTest
 
         $compiled = $query->compile();
 
-        self::assertArrayHasKey('field', $compiled);
-        self::assertArrayHasKey('operator', $compiled['field']);
+        self::assertArrayHasPath('field.operator', $compiled);
         self::assertEquals(\ELASTICS_OPERATOR_OR, $compiled['field']['operator']);
     }
 
@@ -145,8 +146,7 @@ class MatchTest extends ElasticsTest
 
         $compiled = $query->compile();
 
-        self::assertArrayHasKey('field', $compiled);
-        self::assertArrayHasKey('lenient', $compiled['field']);
+        self::assertArrayHasPath('field.lenient', $compiled);
         self::assertEquals(true, $compiled['field']['lenient']);
     }
 
@@ -160,8 +160,7 @@ class MatchTest extends ElasticsTest
 
         $compiled = $query->compile();
 
-        self::assertArrayHasKey('field', $compiled);
-        self::assertArrayHasKey('zero_terms_query', $compiled['field']);
+        self::assertArrayHasPath('field.zero_terms_query', $compiled);
         self::assertEquals(\ELASTICS_ZERO_TERMS_NONE, $compiled['field']['zero_terms_query']);
     }
 
@@ -185,8 +184,7 @@ class MatchTest extends ElasticsTest
 
         $compiled = $query->compile();
 
-        self::assertArrayHasKey('field', $compiled);
-        self::assertArrayHasKey('cutoff_frequency', $compiled['field']);
+        self::assertArrayHasPath('field.cutoff_frequency', $compiled);
         self::assertEquals(1.1, $compiled['field']['cutoff_frequency']);
     }
 
@@ -200,8 +198,7 @@ class MatchTest extends ElasticsTest
 
         $compiled = $query->compile();
 
-        self::assertArrayHasKey('field', $compiled);
-        self::assertArrayHasKey('minimum_should_match', $compiled['field']);
+        self::assertArrayHasPath('field.minimum_should_match', $compiled);
         self::assertEquals(2, $compiled['field']['minimum_should_match']);
     }
 }

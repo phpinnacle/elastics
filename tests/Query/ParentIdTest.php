@@ -15,16 +15,16 @@ namespace PHPinnacle\Elastics\Tests\Query;
 use PHPinnacle\Elastics\Tests\ElasticsTest;
 use PHPinnacle\Elastics\Query;
 
-class MatchAllTest extends ElasticsTest
+class ParentIdTest extends ElasticsTest
 {
     /**
      * @test
      */
     public function name()
     {
-        $query = new Query\MatchAll();
+        $query = new Query\ParentId('my_child', '_id_1');
 
-        self::assertEquals('match_all', $query->name());
+        self::assertEquals('parent_id', $query->name());
     }
 
     /**
@@ -32,22 +32,25 @@ class MatchAllTest extends ElasticsTest
      */
     public function compile()
     {
-        $query = new Query\MatchAll();
+        $query = new Query\ParentId('my_child', '_id_1');
 
-        self::assertEquals([], $query->compile());
+        self::assertEquals([
+            'type' => 'my_child',
+            'id'   => '_id_1',
+        ], $query->compile());
     }
 
     /**
      * @test
      */
-    public function boost()
+    public function ignoreUnmapped()
     {
-        $query = new Query\MatchAll();
-        $query->boost(1.2);
+        $query = new Query\ParentId('my_child', '_id_1');
+        $query->ignoreUnmapped(true);
 
         $compiled = $query->compile();
 
-        self::assertArrayHasPath('boost', $compiled);
-        self::assertEquals(1.2, $compiled['boost']);
+        self::assertArrayHasPath('ignore_unmapped', $compiled);
+        self::assertEquals(true, $compiled['ignore_unmapped']);
     }
 }

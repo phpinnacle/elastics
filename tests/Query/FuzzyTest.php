@@ -56,12 +56,10 @@ class FuzzyTest extends ElasticsTest
         $query = new Query\Fuzzy('field', 'value');
         $query->boost(1.2);
 
-        self::assertEquals([
-            'field' => [
-                'value' => 'value',
-                'boost' => 1.2,
-            ],
-        ], $query->compile());
+        $compiled = $query->compile();
+
+        self::assertArrayHasPath('field.boost', $compiled);
+        self::assertEquals(1.2, $compiled['field']['boost']);
     }
 
     /**
@@ -72,12 +70,10 @@ class FuzzyTest extends ElasticsTest
         $query = new Query\Fuzzy('field', 'value');
         $query->prefixLength(5);
 
-        self::assertEquals([
-            'field' => [
-                'value'         => 'value',
-                'prefix_length' => 5,
-            ],
-        ], $query->compile());
+        $compiled = $query->compile();
+
+        self::assertArrayHasPath('field.prefix_length', $compiled);
+        self::assertEquals(5, $compiled['field']['prefix_length']);
     }
 
     /**
@@ -88,12 +84,10 @@ class FuzzyTest extends ElasticsTest
         $query = new Query\Fuzzy('field', 'value');
         $query->maxExpansions(10);
 
-        self::assertEquals([
-            'field' => [
-                'value'          => 'value',
-                'max_expansions' => 10,
-            ],
-        ], $query->compile());
+        $compiled = $query->compile();
+
+        self::assertArrayHasPath('field.max_expansions', $compiled);
+        self::assertEquals(10, $compiled['field']['max_expansions']);
     }
 
     /**
@@ -104,12 +98,10 @@ class FuzzyTest extends ElasticsTest
         $query = new Query\Fuzzy('field', 'value');
         $query->fuzziness('2');
 
-        self::assertEquals([
-            'field' => [
-                'value'     => 'value',
-                'fuzziness' => '2',
-            ],
-        ], $query->compile());
+        $compiled = $query->compile();
+
+        self::assertArrayHasPath('field.fuzziness', $compiled);
+        self::assertEquals('2', $compiled['field']['fuzziness']);
     }
 
     /**
@@ -120,11 +112,9 @@ class FuzzyTest extends ElasticsTest
         $query = new Query\Fuzzy('field', 'value');
         $query->transpositions(true);
 
-        self::assertEquals([
-            'field' => [
-                'value'          => 'value',
-                'transpositions' => true,
-            ],
-        ], $query->compile());
+        $compiled = $query->compile();
+
+        self::assertArrayHasPath('field.transpositions', $compiled);
+        self::assertEquals(true, $compiled['field']['transpositions']);
     }
 }

@@ -41,16 +41,19 @@ class ConstantScoreTest extends ElasticsTest
                 ],
             ],
         ], $query->compile());
+    }
 
+    /**
+     * @test
+     */
+    public function boost()
+    {
+        $query = new Query\ConstantScore(new Query\Term('field', 'value'));
         $query->boost(1.2);
 
-        self::assertEquals([
-            'filter' => [
-                'term' => [
-                    'field' => 'value',
-                ],
-            ],
-            'boost' => 1.2,
-        ], $query->compile());
+        $compiled = $query->compile();
+
+        self::assertArrayHasPath('boost', $compiled);
+        self::assertEquals(1.2, $compiled['boost']);
     }
 }

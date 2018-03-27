@@ -56,11 +56,10 @@ class MultiMatchTest extends ElasticsTest
         $query = new Query\MultiMatch(['field_one', 'field_two'], 'query string');
         $query->tieBreaker(0.7);
 
-        self::assertEquals([
-            'fields'      => ['field_one', 'field_two'],
-            'query'       => 'query string',
-            'tie_breaker' => 0.7,
-        ], $query->compile());
+        $compiled = $query->compile();
+
+        self::assertArrayHasPath('tie_breaker', $compiled);
+        self::assertEquals(0.7, $compiled['tie_breaker']);
     }
 
     /**

@@ -54,10 +54,10 @@ class QueryStringTest extends ElasticsTest
         $query = new Query\QueryString('this AND that OR thus');
         $query->boost(0.2);
 
-        self::assertEquals([
-            'query' => 'this AND that OR thus',
-            'boost' => 0.2,
-        ], $query->compile());
+        $compiled = $query->compile();
+
+        self::assertArrayHasPath('boost', $compiled);
+        self::assertEquals(0.2, $compiled['boost']);
     }
 
     /**
@@ -70,7 +70,7 @@ class QueryStringTest extends ElasticsTest
 
         $compiled = $query->compile();
 
-        self::assertArrayHasKey('fuzzy_prefix_length', $compiled);
+        self::assertArrayHasPath('fuzzy_prefix_length', $compiled);
         self::assertEquals(5, $compiled['fuzzy_prefix_length']);
     }
 
@@ -84,7 +84,7 @@ class QueryStringTest extends ElasticsTest
 
         $compiled = $query->compile();
 
-        self::assertArrayHasKey('fuzzy_max_expansions', $compiled);
+        self::assertArrayHasPath('fuzzy_max_expansions', $compiled);
         self::assertEquals(20, $compiled['fuzzy_max_expansions']);
     }
 
@@ -98,7 +98,7 @@ class QueryStringTest extends ElasticsTest
 
         $compiled = $query->compile();
 
-        self::assertArrayHasKey('fuzziness', $compiled);
+        self::assertArrayHasPath('fuzziness', $compiled);
         self::assertEquals('AUTO', $compiled['fuzziness']);
     }
 
@@ -112,7 +112,7 @@ class QueryStringTest extends ElasticsTest
 
         $compiled = $query->compile();
 
-        self::assertArrayHasKey('fuzzy_transpositions', $compiled);
+        self::assertArrayHasPath('fuzzy_transpositions', $compiled);
         self::assertEquals(true, $compiled['fuzzy_transpositions']);
     }
 
@@ -126,7 +126,7 @@ class QueryStringTest extends ElasticsTest
 
         $compiled = $query->compile();
 
-        self::assertArrayHasKey('default_operator', $compiled);
+        self::assertArrayHasPath('default_operator', $compiled);
         self::assertEquals(\ELASTICS_OPERATOR_OR, $compiled['default_operator']);
     }
 
@@ -150,7 +150,7 @@ class QueryStringTest extends ElasticsTest
 
         $compiled = $query->compile();
 
-        self::assertArrayHasKey('lenient', $compiled);
+        self::assertArrayHasPath('lenient', $compiled);
         self::assertEquals(true, $compiled['lenient']);
     }
 
@@ -164,7 +164,7 @@ class QueryStringTest extends ElasticsTest
 
         $compiled = $query->compile();
 
-        self::assertArrayHasKey('zero_terms_query', $compiled);
+        self::assertArrayHasPath('zero_terms_query', $compiled);
         self::assertEquals(\ELASTICS_ZERO_TERMS_NONE, $compiled['zero_terms_query']);
     }
 
@@ -188,7 +188,7 @@ class QueryStringTest extends ElasticsTest
 
         $compiled = $query->compile();
 
-        self::assertArrayHasKey('cutoff_frequency', $compiled);
+        self::assertArrayHasPath('cutoff_frequency', $compiled);
         self::assertEquals(1.1, $compiled['cutoff_frequency']);
     }
 
@@ -202,7 +202,7 @@ class QueryStringTest extends ElasticsTest
 
         $compiled = $query->compile();
 
-        self::assertArrayHasKey('minimum_should_match', $compiled);
+        self::assertArrayHasPath('minimum_should_match', $compiled);
         self::assertEquals(2, $compiled['minimum_should_match']);
     }
 }

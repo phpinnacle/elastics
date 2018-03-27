@@ -41,17 +41,20 @@ class DisMaxTest extends ElasticsTest
                 ],
             ],
         ], $query->compile());
+    }
 
-        $query->boost(0.2);
+    /**
+     * @test
+     */
+    public function boost()
+    {
+        $query = new Query\DisMax(new Query\Term('field', 'value'));
+        $query->boost(1.2);
 
-        self::assertEquals([
-            'queries' => [
-                'term' => [
-                    'field' => 'value',
-                ],
-            ],
-            'boost' => 0.2,
-        ], $query->compile());
+        $compiled = $query->compile();
+
+        self::assertArrayHasPath('boost', $compiled);
+        self::assertEquals(1.2, $compiled['boost']);
     }
 
     /**

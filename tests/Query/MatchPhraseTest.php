@@ -46,23 +46,18 @@ class MatchPhraseTest extends ElasticsTest
      */
     public function slop()
     {
-        $query = new Query\MatchPhrase('field', 'phrase', 1);
+        $query    = new Query\MatchPhrase('field', 'phrase', 1);
+        $compiled = $query->compile();
 
-        self::assertEquals([
-            'field' => [
-                'query' => 'phrase',
-                'slop'  => 1,
-            ],
-        ], $query->compile());
+        self::assertArrayHasPath('field.slop', $compiled);
+        self::assertEquals(1, $compiled['field']['slop']);
 
         $query->slop(2);
 
-        self::assertEquals([
-            'field' => [
-                'query' => 'phrase',
-                'slop'  => 2,
-            ],
-        ], $query->compile());
+        $compiled = $query->compile();
+
+        self::assertArrayHasPath('field.slop', $compiled);
+        self::assertEquals(2, $compiled['field']['slop']);
     }
 
     /**
@@ -73,11 +68,9 @@ class MatchPhraseTest extends ElasticsTest
         $query = new Query\MatchPhrase('field', 'phrase');
         $query->analyzer('custom');
 
-        self::assertEquals([
-            'field' => [
-                'query'    => 'phrase',
-                'analyzer' => 'custom',
-            ],
-        ], $query->compile());
+        $compiled = $query->compile();
+
+        self::assertArrayHasPath('field.analyzer', $compiled);
+        self::assertEquals('custom', $compiled['field']['analyzer']);
     }
 }

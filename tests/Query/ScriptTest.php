@@ -15,16 +15,16 @@ namespace PHPinnacle\Elastics\Tests\Query;
 use PHPinnacle\Elastics\Tests\ElasticsTest;
 use PHPinnacle\Elastics\Query;
 
-class PrefixTest extends ElasticsTest
+class ScriptTest extends ElasticsTest
 {
     /**
      * @test
      */
     public function name()
     {
-        $query = new Query\Prefix('field', 'va');
+        $query = new Query\Script('ctx.script.source');
 
-        self::assertEquals('prefix', $query->name());
+        self::assertEquals('script', $query->name());
     }
 
     /**
@@ -32,26 +32,20 @@ class PrefixTest extends ElasticsTest
      */
     public function compile()
     {
-        $query = new Query\Prefix('field', 'va');
+        $source = "doc['num1'].value > params.value";
+        $lang   =  \ELASTICS_LANG_PAINLESS;
+        $params = [
+            'value' => 1,
+        ];
+
+        $query = new Query\Script($source, $params, $lang);
 
         self::assertEquals([
-            'field' => [
-                'value' => 'va',
+            'script' => [
+                'source' => $source,
+                'params' => $params,
+                'lang'   => $lang,
             ],
         ], $query->compile());
-    }
-
-    /**
-     * @test
-     */
-    public function boost()
-    {
-        $query = new Query\Prefix('field', 'va');
-        $query->boost(1.2);
-
-        $compiled = $query->compile();
-
-        self::assertArrayHasPath('field.boost', $compiled);
-        self::assertEquals(1.2, $compiled['field']['boost']);
     }
 }

@@ -34,6 +34,20 @@ const
 ;
 
 const
+    ELASTICS_SCORE_MODE_AVG  = 'avg',
+    ELASTICS_SCORE_MODE_SUM  = 'sum',
+    ELASTICS_SCORE_MODE_MIN  = 'min',
+    ELASTICS_SCORE_MODE_MAX  = 'max',
+    ELASTICS_SCORE_MODE_NONE = 'none'
+;
+
+const
+    ELASTICS_LANG_PAINLESS   = 'painless',
+    ELASTICS_LANG_MUSTACHE   = 'mustache',
+    ELASTICS_LANG_EXPRESSION = 'expression'
+;
+
+const
     ELASTICS_REGEXP_ALL          = 1,
     ELASTICS_REGEXP_ANYSTRING    = 2,
     ELASTICS_REGEXP_COMPLEMENT   = 4,

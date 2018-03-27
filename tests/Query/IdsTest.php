@@ -47,9 +47,9 @@ class IdsTest extends ElasticsTest
         $query = new Query\Ids([1,2]);
         $query->type('user', 'customer');
 
-        self::assertEquals([
-            'type'   => ['user', 'customer'],
-            'values' => [1,2],
-        ], $query->compile());
+        $compiled = $query->compile();
+
+        self::assertArrayHasPath('type', $compiled);
+        self::assertEquals(['user', 'customer'], $compiled['type']);
     }
 }

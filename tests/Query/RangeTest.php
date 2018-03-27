@@ -40,16 +40,20 @@ class RangeTest extends ElasticsTest
                 'lte'   => 2.0,
             ],
         ], $query->compile());
+    }
 
+    /**
+     * @test
+     */
+    public function boost()
+    {
+        $query = new Query\Range('field');
         $query->boost(0.2);
 
-        self::assertEquals([
-            'field' => [
-                'gte'   => 1.0,
-                'lte'   => 2.0,
-                'boost' => 0.2,
-            ],
-        ], $query->compile());
+        $compiled = $query->compile();
+
+        self::assertArrayHasPath('field.boost', $compiled);
+        self::assertEquals(0.2, $compiled['field']['boost']);
     }
 
     /**
